@@ -1,4 +1,4 @@
-package com.example.demo.configuration;
+package com.example.demo.oauth.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory().withClient("admin")
-		.secret("root")
+		.secret("{noop}root")
 		.redirectUris("http://localhost:9111/oauth2/callback")
 		.authorizedGrantTypes("authorization_code", "password", "refresh_token")
 		.scopes("read","write")
