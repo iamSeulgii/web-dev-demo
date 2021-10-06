@@ -1,11 +1,14 @@
 package com.example.demo.oauth.controller;
 
+import java.io.IOException;
+
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.util.LinkedMultiValueMap;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
@@ -43,6 +47,13 @@ public class Oauth2Controller {
 		
 		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 //		restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+		 restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+		 restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+		        public boolean hasError(ClientHttpResponse response) throws IOException {
+		            HttpStatus statusCode = response.getStatusCode();
+		            return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
+		        }
+		    });
 		ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:9111/oauth/token", request, String.class);
         if (response.getStatusCode() == HttpStatus.OK) {
             return gson.fromJson(response.getBody(), OAuth2Token.class);
