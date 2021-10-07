@@ -1,6 +1,6 @@
 # demo-ui
 
-> my demo ui project
+> A Vue.js project
 
 ## Build Setup
 

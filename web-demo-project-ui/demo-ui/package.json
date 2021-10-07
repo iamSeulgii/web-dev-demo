@@ -1,7 +1,7 @@
 {
   "name": "demo-ui",
   "version": "1.0.0",
-  "description": "my demo ui project",
+  "description": "A Vue.js project",
   "author": "seulgi <ebbi33@hanwha.com>",
   "private": true,
   "scripts": {
